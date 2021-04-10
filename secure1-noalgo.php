@@ -24,11 +24,11 @@ function validateUser($username,$password){
   return false; //record not found matching credentials, return false
 }
 
-insertUser('Smith','password1');
-insertUser('David', 'password2');
-echo validateUser('Smith', 'password1');
+insertUser('Ally','password1');
+insertUser('Bobby', 'password2');
+echo validateUser('Ally', 'password1');
 echo "<br>";
-echo validateUser('David', 'password2');
+echo validateUser('Bobby', 'password2');
 ?>
 <!--
 ----------------------------------------------------------------------------------------------------------------------------

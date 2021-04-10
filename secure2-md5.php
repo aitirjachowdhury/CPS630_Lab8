@@ -24,9 +24,9 @@ function validateUser($username,$password){
   return false; //record not found matching credentials, return false
 }
 
-insertUser('Smith','password1');
+insertUser('Charlie','password1');
 insertUser('David', 'password2');
-echo validateUser('Smith', 'password1');
+echo validateUser('Charlie', 'password1');
 echo "<br>";
 echo validateUser('David', 'password2');
 

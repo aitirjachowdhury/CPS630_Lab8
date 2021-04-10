@@ -3,7 +3,7 @@
 //Third approach: An Authentication system using salted passwords
 
 function generateRandomSalt(){
-  return base64_encode(mcrypt_create_iv(12, MCRYPT_DEV_RANDOM));
+  return base64_encode(random_bytes(12));
 }
 // Insert the user with the password salt generated, stored, and
 // password hashed
@@ -16,34 +16,31 @@ function insertUser($username,$password){
   $smt->execute(array($username,md5($password.$salt),$salt));
 }
 
-/*
+
 //Check if the credentials match a user in the system with MD5 Salt hash
 function validateUser($username,$password){
   $pdo = new PDO("mysql:host=localhost;dbname=lab8", 'root', '');
   $sql = "SELECT  Salt FROM Users WHERE  Username=?";
   $smt = $pdo->prepare($sql);
+  $smt->execute(array($username)); //execute the query
 
-  while ($row = $stmt->fetch()) {
-
-    $pdo = new PDO("mysql:host=localhost;dbname=lab8", 'root', '');
+  if ($row = $smt->fetch()) {
     $sql = "SELECT  UserID FROM Users WHERE  Username=? AND
           Password=?";
-
-$smt->execute(array($username,md5($password.$row['salt']))); //execute the query
-if($smt->rowCount()){
-  return true; //record found, return true.
+    $smt = $pdo->prepare($sql);
+    $smt->execute(array($username,md5($password.$row['Salt']))); //execute the query
+    if($smt->rowCount()){
+      return true; //record found, return true.
+    }
+    return false; //record not found matching credentials, return false
 }
-return false; //record not found matching credentials, return false
 }
-}
-*/
-insertUser('Smith','password1');
-//insertUser('David', 'password2');
-//echo validateUser('Smith', 'password1');
-//echo "<br>";
-//echo validateUser('David', 'password2');
 
-
+insertUser('Emma','password1');
+insertUser('Felix', 'password2');
+echo validateUser('Emma', 'password1');
+echo "<br>";
+echo validateUser('Felix', 'password2');
 ?>
 
 <!--
