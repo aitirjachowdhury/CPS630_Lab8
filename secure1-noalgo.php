@@ -19,16 +19,19 @@ function validateUser($username,$password){
   $smt = $pdo->prepare($sql);
   $smt->execute(array($username,$password)); //execute the query
   if($smt->rowCount()){
-    return true; //record found, return true.
+    return "User found!"; //record found, return true.
   }
-  return false; //record not found matching credentials, return false
+  return "User not found!"; //record not found matching credentials, return false
 }
 
 insertUser('Ally','password1');
 insertUser('Bobby', 'password2');
+//Sample Login and Password
 echo validateUser('Ally', 'password1');
 echo "<br>";
 echo validateUser('Bobby', 'password2');
+echo "<br>";
+echo validateUser('Bobby', 'password');
 ?>
 <!--
 ----------------------------------------------------------------------------------------------------------------------------

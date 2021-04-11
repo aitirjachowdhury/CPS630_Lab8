@@ -13,7 +13,7 @@ function insertUser($username,$password){
   $sql = "INSERT INTO Users(Username,Password,Salt)
            VALUES(?,?,?)";
   $smt = $pdo->prepare($sql);
-  $smt->execute(array($username,md5($password.$salt),$salt));
+  $smt->execute(array($username,hashshift($password.$salt),$salt));
 }
 
 
@@ -28,19 +28,33 @@ function validateUser($username,$password){
     $sql = "SELECT  UserID FROM Users WHERE  Username=? AND
           Password=?";
     $smt = $pdo->prepare($sql);
-    $smt->execute(array($username,md5($password.$row['Salt']))); //execute the query
+    $smt->execute(array($username,hashshift($password.$row['Salt']))); //execute the query
     if($smt->rowCount()){
-      return true; //record found, return true.
+      return "User found!"; //record found, return true.
     }
-    return false; //record not found matching credentials, return false
+    return "User not found!"; //record not found matching credentials, return false
 }
+}
+
+function hashshift($pass) {
+  $pass = strtolower(md5($pass));
+  $chars = str_split($pass);
+  $res = array();
+
+  foreach ($chars as $idx => $char) {
+      $res[$idx] = chr(97 + (ord($char) - 91) % 26);
+  }   
+  return join("", $res);
 }
 
 insertUser('Emma','password1');
 insertUser('Felix', 'password2');
+//Sample Login and Password
 echo validateUser('Emma', 'password1');
 echo "<br>";
 echo validateUser('Felix', 'password2');
+echo "<br>";
+echo validateUser('Felix', 'password');
 ?>
 
 <!--
