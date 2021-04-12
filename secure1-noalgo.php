@@ -1,6 +1,27 @@
 <?php
 
 // First approach to storing passwords (very insecure)
+$table = "lab8";
+
+function createTable(){
+  try {
+    $db = new PDO("mysql:host=localhost", 'root', '');
+    $db->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );//Error Handling
+    $sql ="CREATE database lab8;" ;
+    $db->exec($sql);
+    $pdo = new PDO("mysql:host=localhost;dbname=lab8", 'root', '');
+    $sql ="CREATE table Users(
+    UserID INT( 11 ) AUTO_INCREMENT PRIMARY KEY,
+    Username VARCHAR( 50 ) NOT NULL, 
+    Password VARCHAR( 50 ) NOT NULL,
+    Salt VARCHAR(50)
+    );" ;
+    $pdo->exec($sql);
+} catch(PDOException $e) {
+   echo $e->getMessage();//Remove or change message in production code
+}
+}
+
 
 //Insert the user with the password
 function insertUser($username,$password){
@@ -24,6 +45,7 @@ function validateUser($username,$password){
   return "User not found!"; //record not found matching credentials, return false
 }
 
+createTable();
 insertUser('Ally','password1');
 insertUser('Bobby', 'password2');
 //Sample Login and Password
